@@ -1,0 +1,74 @@
+{
+  "tests": [
+    {
+      "name": "API Design Video Content Service Test",
+      "setup": "",
+      "run": "./gradlew apidesign-videocontentservice-test --rerun-tasks",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "DynamoDB Table Design Ice Cream Parlor Unit Tests",
+      "setup": "",
+      "run": "./gradlew dynamodbtabledesign-icecreamparlor-extension-test --rerun-tasks",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "DynamoDB Index Design Little League DAO Tests",
+      "setup": "",
+      "run": "./gradlew dynamodbindexdesign-littleleague-dao-test --rerun-tasks",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "Group Work Kenzie Event Planner DAO Tests",
+      "setup": "",
+      "run": "./gradlew groupwork-kenzieeventplanner-dao --rerun-tasks",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 11,
+      "points": 1
+    },
+    {
+      "name": "Verify Group Work Event Planner",
+      "setup": "",
+      "run": "./gradlew verifytests-eventplanner --rerun-tasks",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "Verify Icecream Parlor",
+      "setup": "",
+      "run": "./gradlew verifytests-icecreamparlor --rerun-tasks",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "Verify Little League",
+      "setup": "",
+      "run": "./gradlew verifytests-littleleague --rerun-tasks",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 1
+    }
+  ]
+}
