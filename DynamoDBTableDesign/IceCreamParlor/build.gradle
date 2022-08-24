@@ -1,0 +1,76 @@
+import groovy.xml.XmlSlurper
+
+plugins {
+    id 'ata-curriculum.snippets-conventions'
+}
+
+checkstyle {
+    def suppressionFile = rootProject.file('Utilities/ATACheckstyle/configuration/checkstyle/unit1/suppressions.xml')
+    configProperties.put('checkstyle.suppression.filter', suppressionFile)
+}
+
+dependencies {
+    // Use JUnit test framework.
+    implementation 'javax.inject:javax.inject:1'
+    implementation 'com.google.dagger:hilt-compiler:2.41'
+    implementation 'com.google.dagger:dagger:2.30'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.30'
+    testAnnotationProcessor 'com.google.dagger:hilt-compiler:2.41'
+    testImplementation(platform('org.junit:junit-bom:5.8.0'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+}
+
+def wflowToTestsMap = [
+        'dynamodbtabledesign-icecreamparlor-phase0': [
+            'com.kenzie.dynamodbtabledesign.icecreamparlor.integration.Phase0Test'
+        ],
+        'dynamodbtabledesign-icecreamparlor-phase1': [
+            'com.kenzie.dynamodbtabledesign.icecreamparlor.integration.Phase1Test'
+        ],
+        'dynamodbtabledesign-icecreamparlor-phase3': [
+            'com.kenzie.dynamodbtabledesign.icecreamparlor.integration.Phase3Test'
+        ],
+        'dynamodbtabledesign-icecreamparlor-extension-test': [
+            'com.kenzie.dynamodbtabledesign.icecreamparlor.ExtensionTest'
+        ]
+]
+
+wflowToTestsMap.forEach { wflowName, testList ->
+    tasks.register(wflowName) {
+        dependsOn wflowtest
+        test.doFirst {
+            filter {
+                testList.each { includeTestsMatching it }
+            }
+        }
+        test.finalizedBy('copyTestResults')
+    }
+}
+
+test.finalizedBy('copyTestResults')
+
+tasks.register('copyTestResults', Copy) {
+    from(layout.buildDirectory.dir("test-results")) {
+        include "test/TEST-com.kenzie.dynamodbtabledesign.icecreamparlor.integration.Phase0Test.xml"
+        include "test/TEST-com.kenzie.dynamodbtabledesign.icecreamparlor.integration.Phase1Test.xml"
+        include "test/TEST-com.kenzie.dynamodbtabledesign.icecreamparlor.integration.Phase3Test.xml"
+    }
+    into layout.projectDirectory.dir("test-results")
+}
+
+def integrationResults = ["test/TEST-com.kenzie.dynamodbtabledesign.icecreamparlor.integration.Phase0Test.xml",
+                          "test/TEST-com.kenzie.dynamodbtabledesign.icecreamparlor.integration.Phase1Test.xml",
+                          "test/TEST-com.kenzie.dynamodbtabledesign.icecreamparlor.integration.Phase3Test.xml"]
+
+tasks.register('verifytests-icecreamparlor') {
+    dependsOn tasks.copyTestResults
+    doLast {
+        integrationResults.forEach {
+            def testResult = layout.projectDirectory.dir("test-results").file(it).asFile
+            def attributesMap = new XmlSlurper().parse(testResult).attributes()
+            assert attributesMap.get("skipped") == "0"
+            assert attributesMap.get("failures") == "0"
+            assert attributesMap.get("errors") == "0"
+        }
+    }
+}

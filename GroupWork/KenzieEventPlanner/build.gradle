@@ -1,0 +1,83 @@
+import groovy.xml.XmlSlurper
+
+plugins {
+    id 'ata-curriculum.snippets-conventions'
+}
+
+checkstyle {
+    def suppressionFile = rootProject.file('Utilities/ATACheckstyle/configuration/checkstyle/unit1/suppressions.xml')
+    configProperties.put('checkstyle.suppression.filter', suppressionFile)
+}
+
+dependencies {
+    implementation 'javax.inject:javax.inject:1'
+    implementation 'com.google.dagger:hilt-compiler:2.41'
+    implementation 'com.google.dagger:dagger:2.30'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.30'
+    testAnnotationProcessor 'com.google.dagger:hilt-compiler:2.41'
+
+    implementation 'com.amazonaws:aws-java-sdk:1.12.162'
+}
+
+def wflowToTestsMap = [
+        'groupwork-kenzieeventplanner-dao': [
+                'com.kenzie.eventplanner.dao.EventDaoTest',
+                'com.kenzie.eventplanner.dao.InviteDaoTest',
+                'com.kenzie.eventplanner.dao.MemberDaoTest'
+        ],
+        'groupwork-kenzieeventplanner-phase0': [
+                'com.kenzie.eventplanner.integration.Phase0Test'
+        ],
+        'groupwork-kenzieeventplanner-phase2': [
+                'com.kenzie.eventplanner.integration.Phase2Test'
+        ],
+        'groupwork-kenzieeventplanner-phase3': [
+                'com.kenzie.eventplanner.integration.Phase3Test'
+        ],
+        'groupwork-kenzieeventplanner-phase4': [
+                'com.kenzie.eventplanner.integration.Phase4Test'
+        ]
+]
+
+wflowToTestsMap.forEach { wflowName, testList ->
+    tasks.register(wflowName) {
+        dependsOn wflowtest
+        test.doFirst {
+            filter {
+                testList.each { includeTestsMatching it }
+            }
+        }
+        test.finalizedBy('copyTestResults')
+    }
+}
+
+test.finalizedBy('copyTestResults')
+
+tasks.register('copyTestResults', Copy) {
+    from(layout.buildDirectory.dir("test-results")) {
+        include "test/TEST-com.kenzie.eventplanner.integration.Phase0Test.xml"
+        include "test/TEST-com.kenzie.eventplanner.integration.Phase2Test.xml"
+        include "test/TEST-com.kenzie.eventplanner.integration.Phase3Test.xml"
+        include "test/TEST-com.kenzie.eventplanner.integration.Phase4Test.xml"
+    }
+    into layout.projectDirectory.dir("test-results")
+}
+
+def integrationResults = ["test/TEST-com.kenzie.eventplanner.integration.Phase0Test.xml",
+                          "test/TEST-com.kenzie.eventplanner.integration.Phase2Test.xml",
+                          "test/TEST-com.kenzie.eventplanner.integration.Phase3Test.xml",
+                          "test/TEST-com.kenzie.eventplanner.integration.Phase4Test.xml"]
+
+tasks.register('verifytests-eventplanner') {
+    dependsOn tasks.copyTestResults
+    doLast {
+        integrationResults.forEach {
+            def testResult = layout.projectDirectory.dir("test-results").file(it).asFile
+            def attributesMap = new XmlSlurper().parse(testResult).attributes()
+            assert attributesMap.get("skipped") == "0"
+            assert attributesMap.get("failures") == "0"
+            assert attributesMap.get("errors") == "0"
+        }
+    }
+}
+

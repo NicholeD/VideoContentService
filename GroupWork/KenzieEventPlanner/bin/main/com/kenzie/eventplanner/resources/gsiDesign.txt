@@ -1,0 +1,21 @@
+We are planning to expand our service with the following operation:
+1. `GetEventsForOrganizer`
+   * Retrieve all `Event` data for a provided `organizerId`
+
+1. Which table contains the data necessary for the operation?
+   - ANSWER:
+2. Explain why we cannot use load or query on the base table to retrieve this data.
+   - ANSWER:
+3. Design the GSI we would create for `GetEventsForOrganizer`.
+   - What table would we create the GSI for?
+      - ANSWER:
+   -  What is the partition key of the GSI?
+      - ANSWER:
+   -  Does the GSI have a sort key? If so, what?
+      - ANSWER:
+   -  What attributes from the base table need to be projected to the GSI?
+      - ANSWER:
+   -  What are the pros/cons of using INCLUDE vs ALL for the attribute projection in this case?
+      - ANSWER:
+   - Which will you use?
+      - ANSWER:
