@@ -5,10 +5,7 @@ import com.kenzie.videocontentservice.service.model.CreateShowRequest;
 import com.kenzie.videocontentservice.service.model.ShowInfo;
 import com.kenzie.videocontentservice.service.model.ShowResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -41,13 +38,32 @@ public class ShowController {
         return ResponseEntity.ok(200);
     }
 
-//    private ShowResponse createShowResponse(ShowInfo showInfo) {
-//        ShowResponse showResponse = new ShowResponse();
-//        showResponse.setId(showInfo.getShowId());
-//        showResponse.setTitle(showInfo.getTitle());
-//        showResponse.setGenre(showInfo.getGenre());
-//        showResponse.setParentalGuideLine(showInfo.getParentalGuideline());
-//        showResponse.setEpisodeLength(showInfo.getEpisodeLength());
-//        return showResponse;
-//    }
+
+
+    @GetMapping("/{showId}")
+    public ResponseEntity<ShowResponse> searchShowById(@PathVariable("showId") String showId) {
+        ShowInfo show = contentService.getShow(showId);
+        //If there are no shows, then return a 204
+        if (show == null) {
+            return ResponseEntity.notFound().build();
+        }
+        //Otherwise, convert into a ShowResponse
+        ShowResponse showResponse = createShowResponse(show);
+        return ResponseEntity.ok(showResponse);
+    }
+
+
+
+    private ShowResponse createShowResponse(ShowInfo showInfo) {
+        ShowResponse showResponse = new ShowResponse();
+        showResponse.setId(showInfo.getShowId());
+        showResponse.setTitle(showInfo.getTitle());
+        showResponse.setGenre(showInfo.getGenre());
+        showResponse.setParentalGuideLine(showInfo.getParentalGuideline());
+        showResponse.setEpisodeLength(0);
+        showResponse.setAverageRating(0);
+        showResponse.setNumberOfRatings(0);
+        showResponse.setNumberOfSeasons(0);
+        return showResponse;
+    }
 }
