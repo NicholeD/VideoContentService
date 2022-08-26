@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.util.UUID.randomUUID;
 
@@ -52,6 +54,21 @@ public class ShowController {
         return ResponseEntity.ok(showResponse);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<ShowResponse>> getAllShows() {
+        List<ShowInfo> shows = contentService.getAllShows();
+        //If there aren't any shows, then return a 204
+        if (shows == null || shows.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        //Otherwise, convert list of shows into list of ShowResponses and return
+        List<ShowResponse> response = new ArrayList<>();
+        for (ShowInfo show : shows) {
+            response.add(this.createShowResponse(show));
+        }
+
+        return ResponseEntity.ok(response);
+    }
 
 
     private ShowResponse createShowResponse(ShowInfo showInfo) {
