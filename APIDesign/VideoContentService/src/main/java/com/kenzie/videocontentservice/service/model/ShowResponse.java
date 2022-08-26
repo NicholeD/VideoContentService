@@ -6,14 +6,14 @@ public class ShowResponse {
     private String showId;
     private String title;
     private ParentalGuideline parentalGuideLine;
-    private int episodeLength;
+    private int episodeLength = 0;
     private String genre;
 
-    private int averageRating;
+    private double averageRating = 0;
 
-    private int numberOfRatings;
+    private int numberOfRatings = 0;
 
-    private int numberOfSeasons;
+    private int numberOfSeasons = 0;
 
     public String getId() {return showId;}
 
@@ -47,7 +47,7 @@ public class ShowResponse {
         this.genre = genre;
     }
 
-    public int getAverageRating() { return averageRating;}
+    public double getAverageRating() { return averageRating;}
 
     public void setAverageRating(int averageRating) { this.averageRating = averageRating; }
 

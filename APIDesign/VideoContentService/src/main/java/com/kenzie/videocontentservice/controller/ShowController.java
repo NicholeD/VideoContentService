@@ -2,10 +2,13 @@ package com.kenzie.videocontentservice.controller;
 
 import com.kenzie.videocontentservice.service.ContentService;
 import com.kenzie.videocontentservice.service.model.*;
+import org.joda.time.DateTime;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.net.URI;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,17 +70,27 @@ public class ShowController {
     }
 
     @PostMapping("/{showId}/season/{seasonNumber}/episode")
-    public ResponseEntity addNewEpisode(@RequestBody CreateNewEpisodeRequest createNewEpisodeRequest) {
+    public ResponseEntity addNewEpisode(@PathVariable ("showId") String showId,
+                                        @PathVariable ("seasonNumber") String seasonNumber) {
         EpisodeInfo episode = new EpisodeInfo();
-        episode.setShowId(createNewEpisodeRequest.getShowId());
+        episode.setShowId(showId);
         episode.setSeasonNumber(0);
-        episode.setEpisodeNumber(0);
-        episode.setTitle(createNewEpisodeRequest.getTitle());
-        episode.setDescription(createNewEpisodeRequest.getDescription());
 
         contentService.addEpisode(episode);
 
         return ResponseEntity.ok(200);
+    }
+
+    @GetMapping("/{showId}/season/{seasonNumber}/episode/{episodeNumber}")
+    public ResponseEntity<EpisodeResponse> getEpisode(@PathVariable ("showId") String showId,
+                                                  @PathVariable ("seasonNumber") String seasonNumber,
+                                                  @PathVariable ("episodeNumber") String episodeNumber) {
+        EpisodeInfo episode = contentService.getEpisode(showId, seasonNumber, episodeNumber);
+
+        EpisodeResponse response = createEpisodeResponse(episode);
+        //response.setAired(DateTime.parse("2022-05-12T23:07:47.467Z"));
+
+        return ResponseEntity.ok(response);
     }
 
     private ShowResponse createShowResponse(ShowInfo showInfo) {
@@ -91,5 +104,19 @@ public class ShowController {
         showResponse.setNumberOfRatings(0);
         showResponse.setNumberOfSeasons(0);
         return showResponse;
+    }
+
+    private EpisodeResponse createEpisodeResponse(EpisodeInfo episodeInfo) {
+        EpisodeResponse episode = new EpisodeResponse();
+        episode.setShowId(episodeInfo.getShowId());
+        episode.setSeasonNumber(episodeInfo.getSeasonNumber());
+        episode.setEpisodeNumber(episodeInfo.getEpisodeNumber());
+        episode.setTitle(episodeInfo.getTitle());
+        episode.setAverageRating(episodeInfo.getAverageRating());
+        episode.setNumberOfRatings(episodeInfo.getNumberOfRatings());
+        episode.setAired(episodeInfo.getAired());
+        episode.setDescription(episodeInfo.getDescription());
+
+        return episode;
     }
 }
