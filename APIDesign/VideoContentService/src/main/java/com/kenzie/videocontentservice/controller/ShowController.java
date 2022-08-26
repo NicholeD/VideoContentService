@@ -1,9 +1,7 @@
 package com.kenzie.videocontentservice.controller;
 
 import com.kenzie.videocontentservice.service.ContentService;
-import com.kenzie.videocontentservice.service.model.CreateShowRequest;
-import com.kenzie.videocontentservice.service.model.ShowInfo;
-import com.kenzie.videocontentservice.service.model.ShowResponse;
+import com.kenzie.videocontentservice.service.model.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,8 +38,6 @@ public class ShowController {
         return ResponseEntity.ok(200);
     }
 
-
-
     @GetMapping("/{showId}")
     public ResponseEntity<ShowResponse> searchShowById(@PathVariable("showId") String showId) {
         ShowInfo show = contentService.getShow(showId);
@@ -70,6 +66,19 @@ public class ShowController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/{showId}/season/{seasonNumber}/episode")
+    public ResponseEntity addNewEpisode(@RequestBody CreateNewEpisodeRequest createNewEpisodeRequest) {
+        EpisodeInfo episode = new EpisodeInfo();
+        episode.setShowId(createNewEpisodeRequest.getShowId());
+        episode.setSeasonNumber(0);
+        episode.setEpisodeNumber(0);
+        episode.setTitle(createNewEpisodeRequest.getTitle());
+        episode.setDescription(createNewEpisodeRequest.getDescription());
+
+        contentService.addEpisode(episode);
+
+        return ResponseEntity.ok(200);
+    }
 
     private ShowResponse createShowResponse(ShowInfo showInfo) {
         ShowResponse showResponse = new ShowResponse();
