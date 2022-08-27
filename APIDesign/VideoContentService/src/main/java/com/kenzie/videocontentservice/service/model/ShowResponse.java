@@ -1,19 +1,34 @@
 package com.kenzie.videocontentservice.service.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ShowResponse {
 
-    //TODO: (ND) this class might not be necessary. Instructions didn't specify a ShowResponse
+    @JsonProperty("showId")
     private String showId;
+
+    @JsonProperty("title")
     private String title;
-    private ParentalGuideline parentalGuideLine;
-    private int episodeLength = 0;
+
+    @JsonProperty("parentalGuideline")
+    private String parentalGuideline;
+
+    @JsonProperty("episodeLength")
+    private Integer episodeLength;
+
+    @JsonProperty("genre")
     private String genre;
 
-    private double averageRating = 0;
+    @JsonProperty("averageRating")
+    private Double averageRating;
 
-    private int numberOfRatings = 0;
+    @JsonProperty("numberOfRatings")
+    private Integer numberOfRatings;
 
-    private int numberOfSeasons = 0;
+    @JsonProperty("numberOfSeasons")
+    private Integer numberOfSeasons;
 
     public String getId() {return showId;}
 
@@ -23,19 +38,19 @@ public class ShowResponse {
 
     public void setTitle(String title) {this.title = title;}
 
-    public ParentalGuideline getParentalGuideLine() {
-        return parentalGuideLine;
+    public String getParentalGuideline() {
+        return parentalGuideline;
     }
 
-    public void setParentalGuideLine(ParentalGuideline parentalGuideLine) {
-        this.parentalGuideLine = parentalGuideLine;
+    public void setParentalGuideLine(String parentalGuideline) {
+        this.parentalGuideline = parentalGuideline;
     }
 
-    public int getEpisodeLength() {
+    public Integer getEpisodeLength() {
         return episodeLength;
     }
 
-    public void setEpisodeLength(int episodeLength) {
+    public void setEpisodeLength(Integer episodeLength) {
         this.episodeLength = episodeLength;
     }
 
@@ -47,15 +62,15 @@ public class ShowResponse {
         this.genre = genre;
     }
 
-    public double getAverageRating() { return averageRating;}
+    public Double getAverageRating() { return averageRating;}
 
-    public void setAverageRating(int averageRating) { this.averageRating = averageRating; }
+    public void setAverageRating(Double averageRating) { this.averageRating = averageRating; }
 
-    public int getNumberOfRatings() { return numberOfRatings; }
+    public Integer getNumberOfRatings() { return numberOfRatings; }
 
-    public void setNumberOfRatings(int numberOfRatings) { this.numberOfRatings = numberOfRatings; }
+    public void setNumberOfRatings(Integer numberOfRatings) { this.numberOfRatings = numberOfRatings; }
 
-    public int getNumberOfSeasons() { return numberOfSeasons; }
+    public Integer getNumberOfSeasons() { return numberOfSeasons; }
 
-    public void setNumberOfSeasons(int numberOfSeasons) { this.numberOfSeasons = numberOfSeasons; }
+    public void setNumberOfSeasons(Integer numberOfSeasons) { this.numberOfSeasons = numberOfSeasons; }
 }

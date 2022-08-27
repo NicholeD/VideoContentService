@@ -1,16 +1,35 @@
 package com.kenzie.videocontentservice.service.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class EpisodeResponse {
 
+    @JsonProperty("showId")
     private String showId;
-    private int seasonNumber = 0;
-    private int episodeNumber = 0;
+
+    @JsonProperty("seasonNumber")
+    private int seasonNumber;
+
+    @JsonProperty("episodeNumber")
+    private int episodeNumber;
+
+    @JsonProperty("title")
     private String title;
-    private double averageRating = 0;
-    private int numberOfRatings = 0;
+
+    @JsonProperty("averageRating")
+    private double averageRating;
+
+    @JsonProperty("numberOfRatings")
+    private int numberOfRatings;
+
+    @JsonProperty("aired")
     private Date aired;
+
+    @JsonProperty("description")
     private String description;
 
     public String getShowId() {

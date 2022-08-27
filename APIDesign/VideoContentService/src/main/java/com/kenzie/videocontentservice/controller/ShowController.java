@@ -2,11 +2,10 @@ package com.kenzie.videocontentservice.controller;
 
 import com.kenzie.videocontentservice.service.ContentService;
 import com.kenzie.videocontentservice.service.model.*;
-import org.joda.time.DateTime;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
 import java.net.URI;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -24,25 +23,21 @@ public class ShowController {
         this.contentService = contentService;
     }
 
-    // Create your endpoints here and add the necessary annotations
-
     @PostMapping
-    public ResponseEntity addNewShow(@RequestBody CreateShowRequest createShowRequest) {
+    public ResponseEntity<ShowResponse> addNewShow(@RequestBody CreateShowRequest createShowRequest) {
         ShowInfo showInfo = new ShowInfo();
         showInfo.setShowId(randomUUID().toString());
-        showInfo.setGenre(createShowRequest.getGenre());
         showInfo.setTitle(createShowRequest.getTitle());
-        showInfo.setParentalGuideline(createShowRequest.getParentalGuideLine());
-
+        showInfo.setParentalGuideline(ParentalGuideline.valueOf(createShowRequest.getParentalGuideline()));
+        showInfo.setEpisodeLength(createShowRequest.getEpisodeLength());
+        showInfo.setGenre(createShowRequest.getGenre());
         contentService.createShow(showInfo);
-
-//        ShowResponse showResponse = createShowResponse(showInfo);
-
-        return ResponseEntity.ok(200);
+        ShowResponse response = createShowResponse(showInfo);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{showId}")
-    public ResponseEntity<ShowResponse> searchShowById(@PathVariable("showId") String showId) {
+    public ResponseEntity<ShowResponse> searchShowById(@PathVariable String showId) {
         ShowInfo show = contentService.getShow(showId);
         //If there are no shows, then return a 204
         if (show == null) {
@@ -65,31 +60,45 @@ public class ShowController {
         for (ShowInfo show : shows) {
             response.add(this.createShowResponse(show));
         }
-
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/{showId}/season/{seasonNumber}/episode")
-    public ResponseEntity addNewEpisode(@PathVariable ("showId") String showId,
-                                        @PathVariable ("seasonNumber") String seasonNumber) {
+    public ResponseEntity addNewEpisode(@PathVariable String showId,
+                                        @PathVariable int seasonNumber,
+                                        @RequestBody CreateNewEpisodeRequest createNewEpisodeRequest) {
         EpisodeInfo episode = new EpisodeInfo();
         episode.setShowId(showId);
-        episode.setSeasonNumber(0);
-
+        episode.setSeasonNumber(seasonNumber);
+        episode.setEpisodeNumber(createNewEpisodeRequest.getEpisodeNumber());
+        episode.setTitle(createNewEpisodeRequest.getTitle());
+        episode.setDescription(createNewEpisodeRequest.getDescription());
         contentService.addEpisode(episode);
-
         return ResponseEntity.ok(200);
     }
 
     @GetMapping("/{showId}/season/{seasonNumber}/episode/{episodeNumber}")
-    public ResponseEntity<EpisodeResponse> getEpisode(@PathVariable ("showId") String showId,
-                                                  @PathVariable ("seasonNumber") String seasonNumber,
-                                                  @PathVariable ("episodeNumber") String episodeNumber) {
+    public ResponseEntity<EpisodeResponse> getEpisode(@PathVariable String showId,
+                                                  @PathVariable String seasonNumber,
+                                                  @PathVariable String episodeNumber) {
         EpisodeInfo episode = contentService.getEpisode(showId, seasonNumber, episodeNumber);
-
         EpisodeResponse response = createEpisodeResponse(episode);
-        //response.setAired(DateTime.parse("2022-05-12T23:07:47.467Z"));
+        return ResponseEntity.ok(response);
+    }
 
+    @GetMapping("/{showId}/season/{seasonNumber}/episode/all")
+    public ResponseEntity<List<EpisodeResponse>> getAllEpisodesForShow(@PathVariable String showId,
+                                                                @PathVariable int seasonNumber) {
+        List<EpisodeInfo> episodes = contentService.getAllEpisodesForShow(showId, seasonNumber);
+        //If there aren't any episodes or show doesn't exist, then return a 204
+        if (episodes == null || episodes.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        //Otherwise, convert list of episodes to list of EpisodeResponses and return
+        List<EpisodeResponse> response = new ArrayList<>();
+        for (EpisodeInfo episode : episodes) {
+            response.add(this.createEpisodeResponse(episode));
+        }
         return ResponseEntity.ok(response);
     }
 
@@ -97,12 +106,12 @@ public class ShowController {
         ShowResponse showResponse = new ShowResponse();
         showResponse.setId(showInfo.getShowId());
         showResponse.setTitle(showInfo.getTitle());
+        showResponse.setParentalGuideLine(showInfo.getParentalGuideline().getName());
+        showResponse.setEpisodeLength(showInfo.getEpisodeLength());
         showResponse.setGenre(showInfo.getGenre());
-        showResponse.setParentalGuideLine(showInfo.getParentalGuideline());
-        showResponse.setEpisodeLength(0);
-        showResponse.setAverageRating(0);
-        showResponse.setNumberOfRatings(0);
-        showResponse.setNumberOfSeasons(0);
+        showResponse.setAverageRating(showInfo.getAverageRating());
+        showResponse.setNumberOfRatings(showInfo.getNumberOfRatings());
+        showResponse.setNumberOfSeasons(showInfo.getNumberOfSeasons());
         return showResponse;
     }
 
@@ -116,7 +125,6 @@ public class ShowController {
         episode.setNumberOfRatings(episodeInfo.getNumberOfRatings());
         episode.setAired(episodeInfo.getAired());
         episode.setDescription(episodeInfo.getDescription());
-
         return episode;
     }
 }

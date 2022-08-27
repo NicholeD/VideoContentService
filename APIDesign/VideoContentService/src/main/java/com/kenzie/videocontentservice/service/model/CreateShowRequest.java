@@ -1,9 +1,25 @@
 package com.kenzie.videocontentservice.service.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import javax.validation.constraints.NotEmpty;
+
 public class CreateShowRequest {
+
+    @NotEmpty
+    @JsonProperty("title")
     private String title;
-    private ParentalGuideline parentalGuideLine;
+
+    @NotEmpty
+    @JsonProperty("parentalGuideline")
+    private String parentalGuideline;
+
+    @NotEmpty
+    @JsonProperty("episodeLength")
     private int episodeLength;
+
+    @NotEmpty
+    @JsonProperty("genre")
     private String genre;
 
     public String getTitle() {
@@ -14,12 +30,12 @@ public class CreateShowRequest {
         this.title = title;
     }
 
-    public ParentalGuideline getParentalGuideLine() {
-        return parentalGuideLine;
+    public String getParentalGuideline() {
+        return parentalGuideline;
     }
 
-    public void setParentalGuideLine(ParentalGuideline parentalGuideLine) {
-        this.parentalGuideLine = parentalGuideLine;
+    public void setparentalGuideline(String parentalGuideline) {
+        this.parentalGuideline = parentalGuideline;
     }
 
     public int getEpisodeLength() {
