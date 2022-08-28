@@ -1,5 +1,5 @@
 // Receipts
-date // partition key, date
+date // partition key, string
 customerId // sorting key, string
 receiptId // string
-sundaes // list<string>
+sundaes // lis of strings

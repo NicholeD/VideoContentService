@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.kenzie.dynamodbtabledesign.icecreamparlor.integration.Phase3Test" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-08-28T02:38:31" hostname="Nicholes-MacBook-Pro.local" time="0.823">
+  <properties/>
+  <testcase name="[1] Receipts" classname="com.kenzie.dynamodbtabledesign.icecreamparlor.integration.Phase3Test" time="0.823"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

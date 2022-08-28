@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.kenzie.dynamodbtabledesign.icecreamparlor.integration.Phase0Test" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-08-28T01:17:23" hostname="Nicholes-MacBook-Pro.local" time="0.719">
+<testsuite name="com.kenzie.dynamodbtabledesign.icecreamparlor.integration.Phase0Test" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-08-28T02:38:14" hostname="Nicholes-MacBook-Pro.local" time="0.79">
   <properties/>
-  <testcase name="[1] Recipes" classname="com.kenzie.dynamodbtabledesign.icecreamparlor.integration.Phase0Test" time="0.719"/>
+  <testcase name="[1] Recipes" classname="com.kenzie.dynamodbtabledesign.icecreamparlor.integration.Phase0Test" time="0.79"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
