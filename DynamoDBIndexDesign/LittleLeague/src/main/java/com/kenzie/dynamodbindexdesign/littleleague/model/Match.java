@@ -1,13 +1,16 @@
 package com.kenzie.dynamodbindexdesign.littleleague.model;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 
 import java.util.Objects;
 
 // PARTICIPANTS: Add annotations as necessary to map this POJO to the
 // LeagueMatches table
+
 @DynamoDBTable(tableName = "DynamoDBIndexes-LeagueMatches")
 public class Match {
+    public static final String HOME_MATCHES_INDEX = "HomeTeamMatchesIndex";
+    public static final String AWAY_MATCHES_INDEX = "AwayTeamMatchesIndex";
     private String matchDate;
     private String matchTime;
     private String homeTeamScore;
@@ -26,6 +29,8 @@ public class Match {
         this.awayTeam = awayTeam;
     }
 
+    @DynamoDBHashKey()
+    @DynamoDBIndexRangeKey(globalSecondaryIndexNames = {HOME_MATCHES_INDEX, AWAY_MATCHES_INDEX}, attributeName = "matchDate")
     public String getMatchDate() {
         return matchDate;
     }
@@ -34,6 +39,7 @@ public class Match {
         this.matchDate = matchDate;
     }
 
+    @DynamoDBRangeKey(attributeName = "matchTime")
     public String getMatchTime() {
         return matchTime;
     }
@@ -58,6 +64,7 @@ public class Match {
         this.awayTeamScore = awayTeamScore;
     }
 
+    @DynamoDBIndexHashKey(globalSecondaryIndexName = HOME_MATCHES_INDEX, attributeName = "homeTeam")
     public String getHomeTeam() {
         return homeTeam;
     }
@@ -66,6 +73,7 @@ public class Match {
         this.homeTeam = homeTeam;
     }
 
+    @DynamoDBIndexHashKey(globalSecondaryIndexName = AWAY_MATCHES_INDEX, attributeName = "awayTeam")
     public String getAwayTeam() {
         return awayTeam;
     }

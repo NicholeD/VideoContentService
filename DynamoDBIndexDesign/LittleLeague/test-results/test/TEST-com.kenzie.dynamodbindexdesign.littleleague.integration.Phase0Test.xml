@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.kenzie.dynamodbindexdesign.littleleague.integration.Phase0Test" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-08-29T21:39:05" hostname="Nicholes-MacBook-Pro.local" time="0.868">
+  <properties/>
+  <testcase name="matchesTable_exists()" classname="com.kenzie.dynamodbindexdesign.littleleague.integration.Phase0Test" time="0.868"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
