@@ -3,19 +3,20 @@ We are planning to expand our service with the following operation:
    * Retrieve all `Event` data for a provided `organizerId`
 
 1. Which table contains the data necessary for the operation?
-   - ANSWER:
+   - ANSWER: DynamoDBIndexes-Events
 2. Explain why we cannot use load or query on the base table to retrieve this data.
-   - ANSWER:
+   - ANSWER: Tables only allow this with a single partition key
 3. Design the GSI we would create for `GetEventsForOrganizer`.
    - What table would we create the GSI for?
-      - ANSWER:
+      - ANSWER: Events
    -  What is the partition key of the GSI?
-      - ANSWER:
+      - ANSWER: organizerId
    -  Does the GSI have a sort key? If so, what?
-      - ANSWER:
+      - ANSWER: date
    -  What attributes from the base table need to be projected to the GSI?
-      - ANSWER:
+      - ANSWER: organizerId, time, name, description, isCanceled
    -  What are the pros/cons of using INCLUDE vs ALL for the attribute projection in this case?
-      - ANSWER:
+      - ANSWER: Include: we can exclude isCanceled. All: we'll be able to include isCanceled which is a
+                feature we'll want in the future
    - Which will you use?
-      - ANSWER:
+      - ANSWER: All - it's not that much more data than the bare minimum we would use for Include
