@@ -1,5 +1,8 @@
 package com.kenzie.eventplanner.dao;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedQueryList;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.kenzie.eventplanner.dao.models.Event;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -96,7 +99,13 @@ public class EventDao {
      * @return List of Events (those found for the ID provided)
      */
     public List<Event> getEventsForOrganizer(String organizerId) {
-        // TODO: PARTICIPANTS: in Phase 3, replace this stub with a query to your new index
-        return new ArrayList<>();
+        Map<String, AttributeValue> valueMap = new HashMap<>();
+        valueMap.put(":organizerId", new AttributeValue().withS(organizerId));
+        DynamoDBQueryExpression<Event> queryExpression = new DynamoDBQueryExpression<Event>()
+                .withIndexName(Event.ORGANIZER_ID_INDEX)
+                .withConsistentRead(false)
+                .withKeyConditionExpression("organizerId = :organizerId")
+                .withExpressionAttributeValues(valueMap);
+        return mapper.query(Event.class, queryExpression);
     }
 }

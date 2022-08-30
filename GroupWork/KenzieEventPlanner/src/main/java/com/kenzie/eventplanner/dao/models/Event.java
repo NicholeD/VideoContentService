@@ -1,13 +1,7 @@
 package com.kenzie.eventplanner.dao.models;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.kenzie.eventplanner.converter.ZonedDateTimeConverter;
-
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperFieldModel;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTyped;
 
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -17,6 +11,7 @@ import java.util.Objects;
  */
 @DynamoDBTable(tableName = "DynamoDBIndexes-Events")
 public class Event {
+    public static final String ORGANIZER_ID_INDEX = "OrganizerIdIndex";
     private String id;
     private String organizerId;
     private ZonedDateTime time;
@@ -33,6 +28,7 @@ public class Event {
         this.id = id;
     }
 
+    @DynamoDBIndexHashKey(globalSecondaryIndexName = ORGANIZER_ID_INDEX)
     @DynamoDBAttribute(attributeName = "organizerId")
     public String getOrganizerId() {
         return organizerId;
@@ -44,6 +40,7 @@ public class Event {
 
     @DynamoDBAttribute(attributeName = "time")
     @DynamoDBTypeConverted(converter = ZonedDateTimeConverter.class)
+    @DynamoDBIndexRangeKey(globalSecondaryIndexName = ORGANIZER_ID_INDEX)
     public ZonedDateTime getTime() {
         return time;
     }
