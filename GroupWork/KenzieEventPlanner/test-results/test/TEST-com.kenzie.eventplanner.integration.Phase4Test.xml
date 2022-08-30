@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.kenzie.eventplanner.integration.Phase4Test" tests="3" skipped="0" failures="0" errors="0" timestamp="2022-08-30T02:52:40" hostname="Nicholes-MacBook-Pro.local" time="5.276">
+<testsuite name="com.kenzie.eventplanner.integration.Phase4Test" tests="3" skipped="0" failures="0" errors="0" timestamp="2022-08-30T02:56:39" hostname="Nicholes-MacBook-Pro.local" time="5.011">
   <properties/>
-  <testcase name="getInvitesForMemberActivity_noInvites_returnsEmptyLIst()" classname="com.kenzie.eventplanner.integration.Phase4Test" time="1.949"/>
-  <testcase name="getInvitesForMemberActivity_allAcceptedInvites_returnsAcceptedInvites()" classname="com.kenzie.eventplanner.integration.Phase4Test" time="1.088"/>
-  <testcase name="getInvitesForMemberActivity_someAcceptedInvites_returnsAllInvites()" classname="com.kenzie.eventplanner.integration.Phase4Test" time="2.238"/>
+  <testcase name="getInvitesForMemberActivity_noInvites_returnsEmptyLIst()" classname="com.kenzie.eventplanner.integration.Phase4Test" time="2.124"/>
+  <testcase name="getInvitesForMemberActivity_allAcceptedInvites_returnsAcceptedInvites()" classname="com.kenzie.eventplanner.integration.Phase4Test" time="1.095"/>
+  <testcase name="getInvitesForMemberActivity_someAcceptedInvites_returnsAllInvites()" classname="com.kenzie.eventplanner.integration.Phase4Test" time="1.792"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

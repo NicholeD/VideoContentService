@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.kenzie.eventplanner.integration.Phase2Test" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-08-30T01:43:59" hostname="Nicholes-MacBook-Pro.local" time="0.818">
+<testsuite name="com.kenzie.eventplanner.integration.Phase2Test" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-08-30T02:55:45" hostname="Nicholes-MacBook-Pro.local" time="0.797">
   <properties/>
-  <testcase name="eventsTable_hasExpectedGSI()" classname="com.kenzie.eventplanner.integration.Phase2Test" time="0.818"/>
+  <testcase name="eventsTable_hasExpectedGSI()" classname="com.kenzie.eventplanner.integration.Phase2Test" time="0.797"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
