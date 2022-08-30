@@ -1,11 +1,8 @@
 package com.kenzie.eventplanner.dao;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.kenzie.eventplanner.dao.models.Invite;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDeleteExpression;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.ConditionalCheckFailedException;
@@ -50,10 +47,15 @@ public class InviteDao {
      * @return List of Invite objects sent to the given member
      */
     public List<Invite> getInvitesSentToMember(String memberId) {
-        DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
-            .withFilterExpression("memberId = :memberId")
-            .withExpressionAttributeValues(ImmutableMap.of(":memberId", new AttributeValue(memberId)));
-        return new ArrayList<>(mapper.scan(Invite.class, scanExpression));
+        Map<String, AttributeValue> valueMap = new HashMap<>();
+        valueMap.put(":memberId", new AttributeValue().withS(memberId));
+        DynamoDBQueryExpression<Invite> queryExpression = new DynamoDBQueryExpression<Invite>()
+                .withIndexName(Invite.MEMBER_ID_INDEX)
+                .withConsistentRead(false)
+                .withKeyConditionExpression("memberId = :memberId")
+                .withExpressionAttributeValues(valueMap);
+        QueryResultPage<Invite> inviteQueryResults =  mapper.queryPage(Invite.class, queryExpression);
+        return inviteQueryResults.getResults();
     }
 
     /**

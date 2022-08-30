@@ -1,11 +1,6 @@
 package com.kenzie.eventplanner.dao.models;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperFieldModel;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTyped;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 
 import java.util.Date;
 import java.util.Objects;
@@ -15,7 +10,7 @@ import java.util.Objects;
  */
 @DynamoDBTable(tableName = "DynamoDBIndexes-Invites")
 public class Invite {
-
+    public static final String MEMBER_ID_INDEX = "MemberIdIndex";
     private String eventId;
     private String memberId;
     private Boolean isAttending;
@@ -31,6 +26,7 @@ public class Invite {
         this.eventId = eventId;
     }
 
+    @DynamoDBIndexHashKey(globalSecondaryIndexName = MEMBER_ID_INDEX)
     @DynamoDBRangeKey(attributeName = "memberId")
     public String getMemberId() {
         return memberId;
